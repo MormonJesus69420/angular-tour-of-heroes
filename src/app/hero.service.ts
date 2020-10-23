@@ -12,10 +12,26 @@ export class HeroService {
   constructor(private messageService: MessageService) {}
 
   getHeroes(): Observable<Hero[]> {
-    const heroes = of(HEROES);
+    const heroes = HEROES;
 
-    this.messageService.add('HeroService: fetched heroes');
+    if (heroes.length === 0) {
+      this.messageService.add('HeroService: no heroes were fetched');
+    } else {
+      this.messageService.add('HeroService: fetched all heroes');
+    }
 
-    return heroes;
+    return of(heroes);
+  }
+
+  getHero(id: number): Observable<Hero> {
+    const hero = HEROES.find((h) => h.id === id);
+
+    if (hero === undefined) {
+      this.messageService.add(`HeroService: no hero with id: ${id} found`);
+    } else {
+      this.messageService.add(`HeroService: fetched hero with id: ${id}`);
+    }
+
+    return of(hero);
   }
 }
